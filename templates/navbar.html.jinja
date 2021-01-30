@@ -1,0 +1,33 @@
+<nav class="navbar">
+    <a href="/" class="navbar-brand ml-10">
+        <img src="/images/logo.png" class="mr-sm-10" alt="logo">
+        PyMosaic
+    </a>
+    <ul class="navbar-nav d-none d-md-flex">
+        <li class="nav-item active">
+            <a href="#" class="nav-link">About</a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">Contacts</a>
+        </li>
+    </ul>
+
+    <div class="navbar-content ml-auto">
+        <button class="btn btn-action mr-5" type="button" onclick="halfmoon.toggleDarkMode()" aria-label="Toggle dark mode">
+            <i class="fa fa-moon-o" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div class="navbar-content d-md-none"> 
+        <div class="dropdown with-arrow">
+            <button class="btn" data-toggle="dropdown" type="button" id="navbar-dropdown-toggle-btn-1">
+                Menu
+                <i class="fa fa-angle-down" aria-hidden="true"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right w-200" aria-labelledby="navbar-dropdown-toggle-btn-1">
+                <a href="#" class="dropdown-item">About</a>
+                <a href="#" class="dropdown-item">Contacts</a>
+            </div>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,13 @@
+{% extends "base.html.jinja" %}
+{% block title %} Index {% endblock %}
+
+{% block content %}
+    <h2>Welcome in PyMosaic</h2>
+    <div class="form-group">
+        <div class="custom-file">
+            <input type="file" id="file" accept=".png, .jpg, .jpeg, .gif">
+            <label for="file">Choose image</label>
+        </div>
+    </div>
+    <script src="/js/upload_handler.js"></script>
+{% endblock %}

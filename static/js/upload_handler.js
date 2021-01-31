@@ -1,5 +1,5 @@
 let input = document.querySelector(".custom-file #file");
-let formGroup = document.querySelector(".form-group");
+let imageWrapper = document.querySelector(".row .col-6");
 
 const doUpload = () => {
     let data = new FormData();
@@ -14,8 +14,16 @@ const doUpload = () => {
     fileReader.readAsDataURL(input.files[0]);
     fileReader.addEventListener('load', ()=>{
         const image = new Image();
-        formGroup.appendChild(image);
+
+        if(imageWrapper.childElementCount > 0){
+            imageWrapper.childNodes[0].remove();
+        }
+        else{
+            imageWrapper.appendChild(image);
+        }
+
         image.src = fileReader.result;
+        image.classList.add('img-fluid', 'ml-auto');
     });
 }
 

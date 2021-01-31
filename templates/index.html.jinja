@@ -1,8 +1,16 @@
 {% extends "base.html.jinja" %}
 {% block title %} Index {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
 
 {% block content %}
-    <h2>Welcome in PyMosaic</h2>
+    <h2>Welcome to PyMosaic</h2>
+    <div class="row d-flex justify-content-center">
+            <div class="col-6">
+                
+            </div>
+    </div>
     <div class="form-group">
         <div class="custom-file">
             <input type="file" id="file" accept=".png, .jpg, .jpeg, .gif">

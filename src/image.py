@@ -71,7 +71,7 @@ def main():
     img_transform.open_file()
     img_transform.correct_chunck_size(gsd(img_transform.width, img_transform.height))
     print(img_transform.correct_chunck_sizes)
-    img_transform.divide_onto_chunks(80)
+    img_transform.divide_onto_chunks()
     img_transform.save_new_file()
 
 if __name__ == "__main__" : main()

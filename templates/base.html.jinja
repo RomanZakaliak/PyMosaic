@@ -7,9 +7,11 @@
         <title>{% block title %}{% endblock %} - PyMosaic</title>
         <link href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/css/animation.css">
     {% endblock %}
 </head>
 <body data-set-preferred-mode-onload="true">
+    {% include 'animation.html.jinja' without context %}
     <div class="page-wrapper with-navbar">
         {% include 'navbar.html.jinja' without context %}
         <div class="content-wrapper">

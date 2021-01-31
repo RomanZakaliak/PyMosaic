@@ -1,6 +1,6 @@
 from PIL import Image
 import numpy as np
-import sys
+import sys, os
 
 class ImageTransform:
     def __init__(self, input_file:str = None):
@@ -51,8 +51,8 @@ class ImageTransform:
                     print(ex)
                     continue
 
-    def save_new_file(self, output_file_name:str = "out.png"):
-        self.image.save(output_file_name)
+    def save_new_file(self, destination = './', output_file_name:str = "out.png"):
+        self.image.save(os.path.join(destination, output_file_name))
 
 
 def gsd(a, b):
@@ -70,7 +70,6 @@ def main():
     img_transform = ImageTransform('1.gif')
     img_transform.open_file()
     img_transform.correct_chunck_size(gsd(img_transform.width, img_transform.height))
-    print(img_transform.correct_chunck_sizes)
     img_transform.divide_onto_chunks()
     img_transform.save_new_file()
 

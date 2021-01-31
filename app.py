@@ -1,18 +1,22 @@
 import os
 import secrets
-from flask import Flask, render_template, flash, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, make_response, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 
 from src.image import ImageTransform
 
-
-UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static/uploaded/')
+APP_PATH = os.path.dirname(__file__)
+STATIC_PATH = os.path.join(APP_PATH, 'static')
+UPLOAD_FOLDER = os.path.join(STATIC_PATH, 'uploaded')
+RESULT_FOLDER = os.path.join(STATIC_PATH, 'result')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.mkdir(UPLOAD_FOLDER)
+if not os.path.exists(RESULT_FOLDER):
+    os.mkdir(RESULT_FOLDER)
 
-app = Flask(__name__, static_url_path = '', static_folder = './static/', template_folder = './templates/')
+app = Flask(__name__, static_url_path = '')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = secrets.token_hex(30)
@@ -24,6 +28,13 @@ def allowed_file(filename):
     return '.' in filename and \
             get_file_extension(filename) in ALLOWED_EXTENSIONS
 
+def process_file(filename, chunk_size):
+    img_processor = ImageTransform(os.path.join(UPLOAD_FOLDER, filename))
+    img_processor.open_file()
+    img_processor.divide_onto_chunks(chunk_size)
+    img_processor.save_new_file(destination=RESULT_FOLDER, output_file_name=filename)
+
+
 @app.route('/', methods = ['GET'])
 def index(file_name:str = None):
     return render_template('index.html.jinja')
@@ -31,10 +42,11 @@ def index(file_name:str = None):
 @app.route('/upload_file', methods = ['POST'])
 def upload_file():
     if request.method == 'POST':
-        if 'file' not in request.files:
+        if 'file' not in request.files or 'chunk_size' not in request.form:
             return redirect(request.url)
 
         file = request.files['file']
+        chunk_size = int(request.form['chunk_size'])
 
         if file.filename == '':
             return redirect(request.url)
@@ -44,7 +56,18 @@ def upload_file():
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('index'))
+            full_filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(full_filename)
+            process_file(filename, chunk_size)
+            res = jsonify({'filename':str(filename)})
+            return make_response(res)
+
+@app.route('/download/<string:filename>')
+def download_file(filename):
+    accessed_filename = os.path.join(RESULT_FOLDER, filename)
+    if os.path.isfile(accessed_filename):
+        return send_from_directory(directory=RESULT_FOLDER, filename=filename)
+    else:
+        return "File does not exists"
 
 if __name__ == "__main__": app.run(debug=True, host='0.0.0.0')

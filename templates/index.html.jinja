@@ -6,15 +6,30 @@
 
 {% block content %}
     <h2>Welcome to PyMosaic</h2>
-    <div class="row d-flex justify-content-center">
-            <div class="col-6">
-                
+
+    <div class="mw-full d-flex flex-column align-items-center">
+        <div class="form-group">
+            <div class="custom-file text-center">
+                <input type="file" id="file" accept=".png, .jpg, .jpeg, .gif">
+                <label for="file" class="w-300 align-self-center">Choose image</label>
             </div>
+        </div>
+            
+        <div class="form-group">
+            <label for="chunk-sizes" class="required">Chunk sizes</label>
+            <select class="form-control w-300" id="chunk-sizes" required="required">
+                {% for i in range(1,10) %}
+                    <option value={{i}}>{{i}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button class="btn btn-primary w-150" id="upload" type="button">Upload and process</button>
     </div>
-    <div class="form-group">
-        <div class="custom-file">
-            <input type="file" id="file" accept=".png, .jpg, .jpeg, .gif">
-            <label for="file">Choose image</label>
+
+
+    <div class="d-flex justify-content-center pt-20">
+        <div class="col-6 d-flex justify-content-center">
         </div>
     </div>
     <script src="/js/upload_handler.js"></script>

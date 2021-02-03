@@ -31,6 +31,7 @@ def allowed_file(filename):
 def process_file(filename, chunk_size):
     img_processor = ImageTransform(os.path.join(UPLOAD_FOLDER, filename))
     img_processor.open_file()
+    
     img_processor.divide_onto_chunks(chunk_size)
     img_processor.save_new_file(destination=RESULT_FOLDER, output_file_name=filename)
 
@@ -68,6 +69,10 @@ def download_file(filename):
     if os.path.isfile(accessed_filename):
         return send_from_directory(directory=RESULT_FOLDER, filename=filename)
     else:
-        return "File does not exists"
+        raise Exception("File does not exists")
+
+@app.errorhandler(Exception)
+def handle_exception(exp):
+    return render_template('error.html.jinja', error=exp)
 
 if __name__ == "__main__": app.run(debug=True, host='0.0.0.0')

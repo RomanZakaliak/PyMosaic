@@ -12,8 +12,7 @@ class ImageTransform:
             self.width = self.image.size[0]
             self.height = self.image.size[1]
         except Exception as ex:
-            print(ex)
-            sys.exit(0)
+            raise Exception(ex)
 
     def __get_average_color(self, region_pix_arr):
         if type(region_pix_arr[0]) is np.int64:

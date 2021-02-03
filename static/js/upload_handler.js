@@ -3,6 +3,14 @@ let imageWrapper = document.querySelector('.d-flex.justify-content-center .col-6
 let chunkSize = document.querySelector('#chunk-sizes');
 let uploadBtn = document.querySelector('#upload');
 let loader = document.querySelector('#loader');
+let contantWrapper = document.querySelector('.content-wrapper');
+
+
+const elementCreator = (tagName, ...classList) =>{
+    let element = document.createElement(tagName);
+    element.classList.add(...classList);
+    return element;
+}
 
 const displayPreview = () => {
     const fileReader = new FileReader();
@@ -21,8 +29,6 @@ const displayPreview = () => {
     });
 }
 
-
-
 const sendOnServer = async objToSend => {
     try{
         let response = await fetch('/upload_file', objToSend);
@@ -33,15 +39,14 @@ const sendOnServer = async objToSend => {
             throw new Error('Request complete with errors!');
         }
         loader.classList.toggle('animation-placeholder');
-        const image = new Image();
+        const image = elementCreator('img', 'img-fluid');
         image.src = `/download/${data.filename}`;
-        image.classList.add('img-fluid');
 
-        let a = document.createElement('a');
-        a.href = image.src;
-        a.download = data.filename;
-        a.appendChild(image);
-        imageWrapper.replaceChild(a, imageWrapper.firstChild);
+        let downloadLink = elementCreator('a');
+        downloadLink.href = image.src;
+        downloadLink.download = data.filename;
+        downloadLink.appendChild(image);
+        imageWrapper.replaceChild(downloadLink, imageWrapper.firstChild);
 
     } catch(error){
         console.log(error);

@@ -1,47 +1,54 @@
-.animation-palaceholder{
+.animation-placeholder{
     width: 100vw;
     height: 100vh;
+    position: absolute;
     background-color: #1e1e1e;
+    opacity: 0.9;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 1000;
 }
 
-.animation-palaceholder .animation-wrapper{
-    top: 50%;
-    left: 50%;
+.animation-placeholder .text-wrapper p{
+    color: #9f9f9f;
+    font-size: 1.5rem;
+}
+
+.animation-placeholder .animation-wrapper{
     display: grid;
     grid-template-columns: 1fr 1fr;
     width: 40px;
 }
 
-.animation-palaceholder .animation-wrapper *{
+.animation-placeholder .animation-wrapper *{
     width: 20px;
     height: 20px;
 }
 
-.animation-palaceholder .animation-wrapper .first{
+.animation-placeholder .animation-wrapper .first{
     background-color: #f2f4ef;
     margin: 0 5px 5px 0;
     animation: 2s ease-out infinite alternate animate_square;
 }
 
-.animation-palaceholder .animation-wrapper .second{
+.animation-placeholder .animation-wrapper .second{
     background-color: #c2e3f4;
     margin: 0 5px 5px 0;
     animation: 2s ease-out infinite alternate-reverse animate_rhomb;
 }
 
-.animation-palaceholder .animation-wrapper .third{
+.animation-placeholder .animation-wrapper .third{
     background-color: #030305;
     margin: 0 5px 0 0;
     animation: 2s ease-out infinite alternate-reverse animate_rhomb;
 }
 
-.animation-palaceholder .animation-wrapper .forth{
+.animation-placeholder .animation-wrapper .forth{
     background-color: #efb730;
     animation: 2s ease-out infinite alternate animate_square;
+    text-shadow: rgba(10,10 , 10, 0.9) 0 0 2px;
 }
 
 @keyframes animate_rhomb{

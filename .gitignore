@@ -3,6 +3,7 @@
 *.png
 *.jpeg
 *.gif
-__pycache__
-.vscode
-env
+/__pycache__/
+/.vscode/
+/env/
+!/static/images/*

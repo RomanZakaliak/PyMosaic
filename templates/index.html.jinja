@@ -2,7 +2,7 @@
 {% block title %} Index {% endblock %}
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="/css/index-style.css" />
+    <link rel="stylesheet" href={{ url_for('static', filename='/css/index-style.css') }} />
 {% endblock %}
 
 {% block content %}
@@ -31,5 +31,5 @@
         <div class="col-6 d-flex justify-content-center">
         </div>
     </div>
-    <script src="/js/upload_handler.js"></script>
+    <script src={{ url_for('static', filename='/js/upload_handler.js') }}></script>
 {% endblock %}

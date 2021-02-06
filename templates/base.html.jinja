@@ -20,10 +20,8 @@
     {% include 'animation.html.jinja' without context %}
     <div class="page-wrapper with-navbar">
         {% include 'navbar.html.jinja' without context %}
-        <div class="content-wrapper">
-            {% block content %}
-            {% endblock %}
-        </div>
+        {% block content %}
+        {% endblock %}
         <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
     </div>
 </body>

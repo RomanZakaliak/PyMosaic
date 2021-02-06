@@ -1,7 +1,7 @@
 let input = document.querySelector('.custom-file #file');
 let imageWrapper = document.querySelector('.d-flex.justify-content-center .col-6');
-let chunkSize = document.querySelector('#chunk-sizes');
-let uploadBtn = document.querySelector('#upload');
+let chunkSize = document.querySelector('.form-control.form-control-sm');
+let uploadForm = document.querySelector('#form-upload');
 let loader = document.querySelector('#loader');
 let contantWrapper = document.querySelector('.content-wrapper');
 
@@ -19,6 +19,7 @@ const displayPreview = () => {
         const image = document.createElement('img');
 
         image.src = fileReader.result;
+        image.width = window.innerWidth/4;
         image.classList.add('img-fluid');
 
         if(imageWrapper.firstChild){
@@ -40,6 +41,7 @@ const sendOnServer = async objToSend => {
         }
         loader.classList.toggle('animation-placeholder');
         const image = elementCreator('img', 'img-fluid');
+        image.width = window.innerWidth/4;
         image.src = `/download/${data.filename}`;
 
         let downloadLink = elementCreator('a');
@@ -54,8 +56,18 @@ const sendOnServer = async objToSend => {
     }
 }
 
-const upload = ()=> {
-    if(input.files.length == 0) return;
+const upload = event => {
+    event.preventDefault();
+
+    if(!input.validity.valid){
+        input.setCustomValidity('Please select file!');
+        return;
+    }
+
+    if(!chunkSize.validity.valid){
+        chunkSize.setCustomValidity('Chunk size must be in range of 2 to 1000!');
+        return;
+    }
 
     let data = new FormData();
     data.append('file', input.files[0]);
@@ -70,4 +82,4 @@ const upload = ()=> {
 }
 
 input.addEventListener('change', displayPreview, false);
-uploadBtn.addEventListener('click', upload, false);
+uploadForm.addEventListener('submit', upload, false);

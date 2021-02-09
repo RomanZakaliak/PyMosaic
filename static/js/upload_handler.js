@@ -1,9 +1,9 @@
-let input = document.querySelector('.custom-file #file');
-let imageWrapper = document.querySelector('.d-flex.justify-content-center .col-6');
-let chunkSize = document.querySelector('.form-control.form-control-sm');
-let uploadForm = document.querySelector('#form-upload');
-let loader = document.querySelector('#loader');
-let contantWrapper = document.querySelector('.content-wrapper');
+const fileInput = document.querySelector('.custom-file #file');
+const imageWrapper = document.querySelector('.d-flex.justify-content-center .col-6');
+const chunkSize = document.querySelector('.form-control.form-control-sm');
+const uploadForm = document.querySelector('#form-upload');
+const loader = document.querySelector('#loader');
+const contantWrapper = document.querySelector('.content-wrapper');
 
 
 const elementCreator = (tagName, ...classList) =>{
@@ -14,7 +14,7 @@ const elementCreator = (tagName, ...classList) =>{
 
 const displayPreview = () => {
     const fileReader = new FileReader();
-    fileReader.readAsDataURL(input.files[0]);
+    fileReader.readAsDataURL(fileInput.files[0]);
     fileReader.addEventListener('load', ()=>{
         const image = document.createElement('img');
 
@@ -58,19 +58,31 @@ const sendOnServer = async objToSend => {
 
 const upload = event => {
     event.preventDefault();
+    try{
+        [fileInput, chunkSize].forEach(item => {
+            if(!item.validity.valid ){
+                if(item.parentNode.lastElementChild.classList.contains('invalid-feedback')){
+                    throw new Error('Form invalid');
+                }
 
-    if(!input.validity.valid){
-        input.setCustomValidity('Please select file!');
-        return;
-    }
+                var errorText = elementCreator('p','invalid-feedback');
 
-    if(!chunkSize.validity.valid){
-        chunkSize.setCustomValidity('Chunk size must be in range of 2 to 1000!');
+                if(item.type == 'file'){
+                    errorText.innerText = "Please, select file for process!";
+                } else{
+                    errorText.innerText = "Chunk size must be in range of 2 to 1000!";
+                }
+
+                item.parentElement.appendChild(errorText);
+                throw new Error('Form ivalid!');
+            }
+        });
+    } catch{
         return;
     }
 
     let data = new FormData();
-    data.append('file', input.files[0]);
+    data.append('file', fileInput.files[0]);
     data.append('chunk_size', chunkSize.value);
     loader.classList.toggle('animation-placeholder');
 
@@ -81,5 +93,15 @@ const upload = event => {
     sendOnServer(objToSend);
 }
 
-input.addEventListener('change', displayPreview, false);
+fileInput.addEventListener('change', displayPreview, false);
 uploadForm.addEventListener('submit', upload, false);
+[fileInput, chunkSize].forEach(item => {
+    item.addEventListener('focus', ()=>{
+        let errorArea = item.parentNode.lastElementChild;
+        console.log(errorArea);
+        if(errorArea.classList.contains('invalid-feedback')){
+            errorArea.remove();
+        }
+    });
+}); 
+

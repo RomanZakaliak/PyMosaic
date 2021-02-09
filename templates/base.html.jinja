@@ -18,8 +18,12 @@
         <link rel="icon" type="image/png" href={{ url_for('static', filename='/images/favicon/android-chrome-512x512.png') }} sizes="512x512">
         <link rel="apple-touch-icon" href={{ url_for('static', filename='/images/favicon/apple-touch-icon.png') }} sizes="180x180">
         <link href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
         <link rel="stylesheet" href={{ url_for('static', filename='/css/animation.css') }} />
+        <style>
+            .moon-img::before{
+                content: "\263C";
+            }
+        </style>
     {% endblock %}
 </head>
 <body data-set-preferred-mode-onload="true">
@@ -28,7 +32,7 @@
         {% include 'navbar.html.jinja' without context %}
         {% block content %}
         {% endblock %}
-        <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
     </div>
 </body>
 </html>

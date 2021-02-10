@@ -14,13 +14,13 @@ def setup_jinja(app):
     return jinja2_env
 
 async def init_app():
-    app = web.Application()
+    app = web.Application(client_max_size=3 * 1024 ** 2)
     setup_jinja(app)
 
     handler = SiteHandler()
 
     setup_routes(app, handler)
-    host, port = "127.0.0.1","5000"
+    host, port = "0.0.0.0","5000"
 
     return app, host, port
 

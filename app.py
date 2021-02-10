@@ -3,9 +3,7 @@ import secrets
 import logging
 
 import asyncio
-from aiohttp import web
-import jinja2
-import aiohttp_jinja2
+
 
 from src.image import ImageTransform
 

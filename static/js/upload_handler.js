@@ -42,7 +42,7 @@ const sendOnServer = async objToSend => {
         loader.classList.toggle('animation-placeholder');
         const image = elementCreator('img', 'img-fluid');
         image.width = window.innerWidth/4;
-        image.src = `/download/${data.filename}`;
+        image.src = `/result/${data.filename}`;
 
         let downloadLink = elementCreator('a');
         downloadLink.href = image.src;

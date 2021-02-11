@@ -42,10 +42,10 @@ const sendOnServer = async objToSend => {
         loader.classList.toggle('animation-placeholder');
         const image = elementCreator('img', 'img-fluid');
         image.width = window.innerWidth/4;
-        image.src = `/result/${data.filename}`;
+        image.src = `/thumbnails/thum_${data.filename}`;
 
         let downloadLink = elementCreator('a');
-        downloadLink.href = image.src;
+        downloadLink.href = `/download/${data.filename}`;
         downloadLink.download = data.filename;
         downloadLink.appendChild(image);
         imageWrapper.replaceChild(downloadLink, imageWrapper.firstChild);
@@ -64,20 +64,18 @@ const upload = event => {
                 if(item.parentNode.lastElementChild.classList.contains('invalid-feedback')){
                     throw new Error('Form invalid');
                 }
-
                 var errorText = elementCreator('p','invalid-feedback');
-
                 if(item.type == 'file'){
                     errorText.innerText = "Please, select file for process!";
                 } else{
                     errorText.innerText = "Chunk size must be in range of 2 to 1000!";
                 }
-
                 item.parentElement.appendChild(errorText);
                 throw new Error('Form ivalid!');
             }
         });
-    } catch{
+    } catch(error){
+        console.error(error);
         return;
     }
 
@@ -98,7 +96,6 @@ uploadForm.addEventListener('submit', upload, false);
 [fileInput, chunkSize].forEach(item => {
     item.addEventListener('focus', ()=>{
         let errorArea = item.parentNode.lastElementChild;
-        console.log(errorArea);
         if(errorArea.classList.contains('invalid-feedback')){
             errorArea.remove();
         }

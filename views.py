@@ -2,8 +2,10 @@ import io
 import asyncio
 import aiohttp_jinja2
 from aiohttp import web
+from multidict import MultiDict
 from src.image import ImageTransform
-from config import RESULT_FOLDER
+from PIL import Image
+from config import RESULT_FOLDER, THUMBNAILS_FOLDER
 
 class SiteHandler:
 
@@ -12,7 +14,6 @@ class SiteHandler:
         return {}
     
     async def upload_file(self, request):
-        #post_id = request.match_info['post']
         post = await request.post()
         image = post.get('file')
         chunk_size = int(post.get('chunk_size'))
@@ -33,11 +34,16 @@ class SiteHandler:
         img = ImageTransform(buf)
         img.open_file()
         img.divide_onto_chunks(chunk_size=chunk_size)
-        img.save_new_file(destination=RESULT_FOLDER, output_file_name=filename)
+        img.save_new_file(thumb_destination=THUMBNAILS_FOLDER, destination=RESULT_FOLDER, output_file_name=filename)
 
     async def download(self, request):
         filename = request.match_info['filename']
-        return web.Response(body=f'{RESULT_FOLDER}/{filename}')
+        image_file = Image.open(f'{RESULT_FOLDER}/{filename}')
+        file_bytes = io.BytesIO()
+        image_file.save(file_bytes, image_file.format)
+        return web.Response(
+            headers=MultiDict({'Content-Disposition': 'Attachment'}),
+            body=file_bytes.getvalue())
 
 
 

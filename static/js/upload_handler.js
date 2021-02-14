@@ -5,7 +5,6 @@ const uploadForm = document.querySelector('#form-upload');
 const loader = document.querySelector('#loader');
 const contantWrapper = document.querySelector('.content-wrapper');
 
-
 const elementCreator = (tagName, ...classList) =>{
     let element = document.createElement(tagName);
     element.classList.add(...classList);
@@ -16,17 +15,17 @@ const displayPreview = () => {
     const fileReader = new FileReader();
     fileReader.readAsDataURL(fileInput.files[0]);
     fileReader.addEventListener('load', ()=>{
-        const image = document.createElement('img');
+        const image = elementCreator('img', 'selection_target');
 
         image.src = fileReader.result;
         image.width = window.innerWidth/4;
-        image.classList.add('img-fluid');
 
         if(imageWrapper.firstChild){
             imageWrapper.replaceChild(image, imageWrapper.firstChild);
         }else{
             imageWrapper.appendChild(image);
         }
+        addSelectionArea(window);
     });
 }
 
@@ -40,6 +39,12 @@ const sendOnServer = async objToSend => {
             throw new Error('Request complete with errors!');
         }
         loader.classList.toggle('animation-placeholder');
+
+        let overlay = window.document.querySelector('.overlay');
+        if(overlay != null){
+            overlay.remove();
+        }
+
         const image = elementCreator('img', 'img-fluid');
         image.width = window.innerWidth/4;
         image.src = `/download/${data.filename}`;
@@ -84,11 +89,15 @@ const upload = event => {
     let data = new FormData();
     data.append('file', fileInput.files[0]);
     data.append('chunk_size', chunkSize.value);
+
+    for(const [key, value] of Object.entries(selectedArea)){
+        data.append(key, value);
+    }
     loader.classList.toggle('animation-placeholder');
 
     let objToSend = {
         method: 'POST',
-        body: data
+        body: data    
     };
     sendOnServer(objToSend);
 }

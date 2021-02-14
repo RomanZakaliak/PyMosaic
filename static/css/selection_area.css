@@ -1,0 +1,46 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.selection_wrapper{
+    position: relative;
+    width: 50%;
+    z-index: 100;
+}
+.overlay{
+    position: absolute;
+    background-color: rgba(80, 80, 80, 0.6);
+    pointer-events: none;
+}
+.selection_area{
+    z-index: 100;
+    position: absolute;
+    border: 1px solid #273848;
+    animation-name: border_animate;
+    animation-duration: .8s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+img.selection_target{
+    position: absolute;
+    object-fit: cover; 
+    z-index: -1;
+    width: 100%;
+}
+
+@keyframes border_animate{
+    0%{
+        border-color: #273848;
+        border-style: ridge;
+    }
+    50%{
+        border-color: #f3f3f3;
+        border-style: dotted;
+    }
+    100%{
+        border-color: #4f4846;
+        border-style: dashed;
+    }
+}

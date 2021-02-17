@@ -20,8 +20,8 @@ class ImageTransform(object):
         self.image.save(os.path.join(destination, output_file_name))
 
 class Pixelize(ImageTransform):
-    def __init__(self, filename):
-        super().__init__(filename)
+    def __init__(self, file):
+        super().__init__(file)
 
     def __get_average_color(self, region_pix_arr):
         if type(region_pix_arr[0]) is np.int64:

@@ -20,15 +20,16 @@ async def init_app():
     handler = SiteHandler()
 
     setup_routes(app, handler)
-    host, port = "0.0.0.0","5000"
 
-    return app, host, port
+    return app
 
 def main():
     logging.basicConfig(level=logging.DEBUG)
 
+    host, port = "0.0.0.0", "5000"
+
     loop = asyncio.get_event_loop()
-    app, host, port = loop.run_until_complete(init_app())
+    app = loop.run_until_complete(init_app())
     web.run_app(app, host=host, port=port)
 
 if __name__ == '__main__':

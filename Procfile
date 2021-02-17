@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:$PORT app:app -k aiohttp.worker.GunicornWebWorker main:main
+web: gunicorn --bind 0.0.0.0:$PORT app:app -k aiohttp.worker.GunicornWebWorker main:init_app

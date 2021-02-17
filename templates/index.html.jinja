@@ -2,8 +2,9 @@
 {% block title %} Index {% endblock %}
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href={{ url_for('static', filename='/css/index-style.css') }} />
-    <link rel="stylesheet" href={{ url_for('static', filename='/css/selection_area.css')}} />
+    <link rel="stylesheet" href={{ url('static', filename='/css/index-style.css') }} />
+    <link rel="stylesheet" href={{ for('static', filename='/css/selection_area.css')}} />
+
 {% endblock %}
 
 {% block content %}
@@ -32,6 +33,7 @@
         <div class="col-6 d-flex justify-content-center selection_wrapper">
         </div>
     </div>
-    <script defer src={{ url_for('static', filename='/js/selection_area.js') }}></script>
-    <script async src={{ url_for('static', filename='/js/upload_handler.js') }}></script>
+
+    <script defer src={{ url('static', filename='/js/selection_area.js') }}></script>
+    <script async src={{ url('static', filename='/js/upload_handler.js') }}></script>
 {% endblock %}

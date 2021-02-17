@@ -1,9 +1,15 @@
 import os
 import secrets
-from flask import Flask, render_template, request, redirect, make_response, send_from_directory, jsonify
-from werkzeug.utils import secure_filename
+import logging
+
+import asyncio
+
 
 from src.image import Pixelize
+
+
+log = logging.getLogger(__name__)
+
 
 APP_PATH = os.path.dirname(__file__)
 STATIC_PATH = os.path.join(APP_PATH, 'static')
@@ -16,7 +22,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 if not os.path.exists(RESULT_FOLDER):
     os.mkdir(RESULT_FOLDER)
 
-app = Flask(__name__, static_url_path = '')
+routes = web.RouteTableDef()
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = secrets.token_hex(30)
@@ -34,8 +40,8 @@ def process_file(filename, coords, chunk_size):
     pixelize.save_new_file(destination=RESULT_FOLDER, output_file_name=filename)
 
 
-@app.route('/', methods = ['GET'])
-def index(file_name:str = None):
+@routes.get('/')
+async def index(file_name:str = None):
     return render_template('index.html.jinja')
 
 def correct_coords(coords: dict)->dict:
@@ -50,15 +56,17 @@ def correct_coords(coords: dict)->dict:
 @app.route('/upload_file', methods = ['POST'])
 def upload_file():
     if request.method == 'POST':
-        if 'file' not in request.files or 'chunk_size' not in request.form:
+        req_files = request.files
+        req_form = request.form
+        if 'file' not in req_files or 'chunk_size' not in req_form:
             return redirect(request.url)
 
-        file = request.files['file']
-        chunk_size = int(request.form['chunk_size'])
+        file = req_files['file']
+        chunk_size = int(req_form['chunk_size'])
         keys = ['x1', 'y1', 'x2', 'y2']
         coords = dict()
         for key in keys:
-            coords[key] = int(float(request.form[key]))
+            coords[key] = int(float(req_form[key]))
         coords = correct_coords(coords)
 
         if file.filename == '':

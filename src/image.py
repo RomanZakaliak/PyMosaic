@@ -53,6 +53,13 @@ class Pixelize(ImageTransform):
                     print(ex)
                     continue
 
+    def save_new_file(self, thumb_destination = None, destination = None, output_file_name:str = "out.png"):
+        thumbnail_size = (200, 200)
+        self.image = Image.fromarray(self.image_pixels)
+        self.image.save(os.path.join(destination, output_file_name))
+        self.image.thumbnail(thumbnail_size)
+        self.image.save(os.path.join(thumb_destination, f'thum_{output_file_name}'))
+
 def main():
     pixelize = Pixelize(os.path.join(os.path.dirname(__file__),'1111.png'))
     pixelize.divide_onto_chunks(None)

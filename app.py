@@ -5,7 +5,7 @@ import logging
 import asyncio
 
 
-from src.image import ImageTransform
+from src.image import Pixelize
 
 
 log = logging.getLogger(__name__)
@@ -34,17 +34,24 @@ def allowed_file(filename):
     return '.' in filename and \
             get_file_extension(filename) in ALLOWED_EXTENSIONS
 
-def process_file(filename, chunk_size):
-    img_processor = ImageTransform(os.path.join(UPLOAD_FOLDER, filename))
-    img_processor.open_file()
-    
-    img_processor.divide_onto_chunks(chunk_size)
-    img_processor.save_new_file(destination=RESULT_FOLDER, output_file_name=filename)
+def process_file(filename, coords, chunk_size):
+    pixelize = Pixelize(os.path.join(UPLOAD_FOLDER, filename))
+    pixelize.divide_onto_chunks(coords, chunk_size)
+    pixelize.save_new_file(destination=RESULT_FOLDER, output_file_name=filename)
 
 
 @routes.get('/')
 async def index(file_name:str = None):
     return render_template('index.html.jinja')
+
+def correct_coords(coords: dict)->dict:
+    if coords['x1'] > coords['x2']:
+        coords['x1'], coords['x2'] = coords['x2'], coords['x1']
+
+    if coords['y1'] > coords['y2']:
+        coords['y1'], coords['y2'] = coords['y2'], coords['y1']
+
+    return coords
 
 @app.route('/upload_file', methods = ['POST'])
 def upload_file():
@@ -56,6 +63,11 @@ def upload_file():
 
         file = req_files['file']
         chunk_size = int(req_form['chunk_size'])
+        keys = ['x1', 'y1', 'x2', 'y2']
+        coords = dict()
+        for key in keys:
+            coords[key] = int(float(req_form[key]))
+        coords = correct_coords(coords)
 
         if file.filename == '':
             return redirect(request.url)
@@ -67,7 +79,7 @@ def upload_file():
             filename = secure_filename(file.filename)
             full_filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(full_filename)
-            process_file(filename, chunk_size)
+            process_file(filename, coords, chunk_size)
             res = jsonify({'filename':str(filename)})
             return make_response(res)
 

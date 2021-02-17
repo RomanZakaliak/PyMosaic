@@ -1,4 +1,13 @@
 h2{
     text-align: center;
+    margin-top: 6rem;
 }
+
+.page-wrapper{
+    overflow: visible;
+}
+nav{
+    z-index: 1000;
+}
+
 

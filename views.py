@@ -9,10 +9,13 @@ from config import RESULT_FOLDER, THUMBNAILS_FOLDER
 
 class SiteHandler:
 
+    #Handle '/' path, returns index view
     @aiohttp_jinja2.template('index.html.jinja')
     async def index(self, request):
         return {}
-    
+
+
+    #Handle '/upload_file' path, fetch upload image and returns it's thumbnail(Need more detailed comments)
     async def upload_file(self, request):
         post = await request.post()
         image = post.get('file')
@@ -42,6 +45,7 @@ class SiteHandler:
         img.divide_onto_chunks(coords, chunk_size)
         img.save_new_file(thumb_destination=THUMBNAILS_FOLDER, destination=RESULT_FOLDER, output_file_name=filename)
 
+    #handle '/download' path
     async def download(self, request):
         filename = request.match_info['filename']
         image_file = Image.open(f'{RESULT_FOLDER}/{filename}')

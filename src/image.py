@@ -40,9 +40,8 @@ class Pixelize(ImageTransform):
         for x in range(coords['x1'], coords['x2'], chunk_size):
             for y in range(coords['y1'], coords['y2'], chunk_size):
                 try:
-                    chunk = self.image_pixels[y:y+self.chunk_size, x:x+self.chunk_size]
-                    avg_color = self.__get_average_color(chunk)
-                    self.image_pixels[y:y+self.chunk_size, x:x+self.chunk_size] = avg_color[0]
+                    chunk = self.image_pixels[y:y+self.chunk_size, x:x+self.chunk_size][0]
+                    self.image_pixels[y:y+self.chunk_size, x:x+self.chunk_size][0] = np.mean(chunk) 
                     
                     
                 except TypeError as te:

@@ -1,3 +1,13 @@
+"""
+This file isn't anymore  part of PyMosaic and it leaved here only 
+to ensure that all features ported to new aiohttp version
+
+You may ignore it or even delete
+All errors which you may aquire does not effect on 
+working of aiohttp part of application
+and could be ignored
+"""
+
 import os
 import secrets
 import logging

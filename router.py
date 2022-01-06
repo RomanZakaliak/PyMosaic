@@ -1,3 +1,7 @@
+"""
+Binding web paths with views
+"""
+
 from config import STATIC_PATH
 
 def setup_routes(app, handler):

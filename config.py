@@ -1,5 +1,5 @@
 """
-    This file contains some settings for application functionality
+    App configuration file
 """
 
 
